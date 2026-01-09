@@ -1,0 +1,39 @@
+int sensorPin = A0;             // LDR or photodiode input
+int sensorValue = 0;
+int piezoPin = 9;                // Buzzer             
+int ledPin = 7;                  // LED 
+int ledPin1 = 6;            
+
+
+void setup()
+ {
+  pinMode(sensorPin, INPUT);
+  pinMode(piezoPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+  pinMode(ledPin1, OUTPUT);
+  
+    
+pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);                      // Enable Serial Monitor
+  digitalWrite(ledPin, HIGH);       // LED ON (arming mode)
+  delay(5000);                               // Delay to exit room
+  digitalWrite(ledPin, LOW);        // System armed
+}
+
+void loop() {
+  sensorValue = analogRead(sensorPin);   // Read light value
+  Serial.println(sensorValue);           // Print for debugging
+
+  if (sensorValue <= 500) {              // If laser beam interrupted
+    digitalWrite(piezoPin, HIGH);        // Buzzer ON
+    tone(piezoPin, 3047, 400);           // Beep tone
+    digitalWrite(ledPin, HIGH);          // LED ON
+    delay(1000);
+    noTone(piezoPin);
+    delay(100);
+  } 
+  else {
+    digitalWrite(piezoPin, LOW);         // Buzzer OFF
+    digitalWrite(ledPin, LOW);           // LED OFF
+  }
+} 
